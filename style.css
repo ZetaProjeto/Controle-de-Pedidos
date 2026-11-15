@@ -99,6 +99,7 @@ button, input { font: inherit; }
 .product-table tr:hover td { background: #fbfdff; }
 .product-name { font-weight: 700; color: #334e68; }
 .product-size { color: var(--muted); font-size: 11px; }
+.qty-unit { color: var(--muted); font-size: 10px; font-weight: 700; margin-right: 7px; }
 .qty-input {
   width: 88px; padding: 8px 9px; border: 1px solid #dce4ec; border-radius: 7px;
   outline: none; text-align: center; color: var(--navy); background: #fff;
@@ -149,7 +150,8 @@ button, input { font: inherit; }
   .product-table td:nth-child(2) { color:var(--muted); font-size:11px; }
   .product-table td:nth-child(2)::before { content:'Tamanho: '; font-weight:700; color:#52677d; }
   .product-table td:nth-child(3) { justify-self:end; display:flex; align-items:center; gap:8px; }
-  .product-table td:nth-child(3)::before { content:'Qtd. a pedir'; color:#52677d; font-size:10px; font-weight:800; white-space:nowrap; }
+  .product-table td:nth-child(3)::before { content:'Fardos'; color:#52677d; font-size:10px; font-weight:800; white-space:nowrap; }
+  .qty-unit { display:none; }
   .qty-input { width:76px; min-height:42px; padding:8px 6px; border-radius:8px; font-size:16px; }
   .product-size { display:inline; }
   .page-footer { flex-direction:column; gap:5px; padding-top:16px; }

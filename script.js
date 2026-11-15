@@ -78,7 +78,7 @@ function render() {
     table.className = "product-table";
     table.innerHTML = `
       <thead><tr>
-        <th>Produto</th><th>Tamanho</th><th>Qtd. a pedir</th>
+        <th>Produto</th><th>Tamanho</th><th>Qtd. a pedir (fardos)</th>
       </tr></thead><tbody></tbody>`;
     const tbody = table.querySelector("tbody");
 
@@ -87,7 +87,7 @@ function render() {
       row.innerHTML = `
         <td class="product-name" data-label="Produto">${product.name}</td>
         <td class="product-size" data-label="Tamanho">${product.size}</td>
-        <td data-label="Qtd. a pedir"><input class="qty-input order-input" type="number" min="0" step="1" inputmode="numeric"
+        <td data-label="Qtd. a pedir (fardos)"><span class="qty-unit">Fardos</span><input class="qty-input order-input" type="number" min="0" step="1" inputmode="numeric"
           aria-label="Quantidade a pedir de ${product.name} ${product.size}" placeholder="0"
           value="${state[product.index].order}" data-index="${product.index}" data-field="order"></td>`;
       tbody.appendChild(row);
@@ -131,7 +131,7 @@ function generatePDF() {
       || sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size));
 
   if (!orderedProducts.length) {
-    alert("Informe a quantidade a pedir de pelo menos um produto antes de gerar o PDF.");
+    alert("Informe a quantidade de fardos de pelo menos um produto antes de baixar o PDF.");
     return;
   }
 
@@ -144,13 +144,13 @@ function generatePDF() {
     const group = orderedProducts.filter(p => p.category === category);
     if (!group.length) return;
     html += `<h2 class="print-section">${category}</h2>
-      <table class="print-table"><thead><tr><th>Produto</th><th>Tamanho</th><th>Qtd. a pedir</th></tr></thead><tbody>`;
+      <table class="print-table"><thead><tr><th>Produto</th><th>Tamanho</th><th>Qtd. a pedir (fardos)</th></tr></thead><tbody>`;
     group.forEach(p => {
-      html += `<tr><td>${p.name}</td><td>${p.size}</td><td><strong>${p.order}</strong></td></tr>`;
+      html += `<tr><td>${p.name}</td><td>${p.size}</td><td><strong>${p.order} fardo(s)</strong></td></tr>`;
     });
     html += `</tbody></table>`;
   });
-  html += `<div class="print-total">Total de unidades solicitadas: ${total}</div>
+  html += `<div class="print-total">Total de fardos solicitados: ${total}</div>
     <div class="print-note">Pedido gerado pelo Controle de Pedidos e Estoque.</div>`;
   const printArea = document.getElementById("printArea");
   printArea.innerHTML = html;

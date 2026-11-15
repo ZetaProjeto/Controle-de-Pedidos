@@ -16,6 +16,6 @@ Site estático para informar quantidades para reposição e imprimir/salvar o pe
 6. Aguarde a publicação e abra o endereço informado pelo GitHub.
 
 ## Gerar o PDF
-Preencha a coluna **Qtd. a pedir** nos produtos desejados e clique em **Gerar PDF do pedido**. Na janela de impressão do navegador, escolha **Salvar como PDF**.
+Preencha a coluna **Qtd. a pedir (fardos)** nos produtos desejados e clique em **Baixar PDF do pedido**. Na janela de impressão do navegador, escolha **Salvar como PDF**.
 
 Observação: os campos são salvos no armazenamento local do navegador (localStorage), no mesmo dispositivo e navegador. Limpar os dados do navegador pode apagar essas informações.
