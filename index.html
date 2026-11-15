@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102a43">
+  <title>Controle de Pedidos e Estoque</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">📦</div>
+      <div>
+        <h1>Controle de Pedidos</h1>
+        <p>Reposição e organização de estoque</p>
+      </div>
+    </div>
+    <button class="btn btn-light" id="printTop" type="button">↓ Gerar PDF</button>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      <div>
+        <span class="eyebrow">PAINEL DE REPOSIÇÃO</span>
+        <h2>Monte seu pedido de bebidas</h2>
+        <p>Informe o estoque disponível e a quantidade que deseja repor. Depois, gere o PDF para enviar ao fornecedor.</p>
+      </div>
+      <div class="date-box">
+        <label for="orderDate">Data do pedido</label>
+        <input type="date" id="orderDate">
+      </div>
+    </section>
+
+    <section class="summary-grid" aria-label="Resumo do pedido">
+      <article class="summary-card">
+        <span>Produtos cadastrados</span>
+        <strong id="totalProducts">0</strong>
+      </article>
+      <article class="summary-card">
+        <span>Produtos no pedido</span>
+        <strong id="itemsInOrder">0</strong>
+      </article>
+      <article class="summary-card highlight">
+        <span>Unidades a pedir</span>
+        <strong id="totalUnits">0</strong>
+      </article>
+    </section>
+
+    <section class="toolbar">
+      <div class="search-wrap">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="Buscar produto..." aria-label="Buscar produto">
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn btn-outline" id="clearOrder" type="button">Limpar pedido</button>
+        <button class="btn btn-primary" id="printButton" type="button">Gerar PDF do pedido</button>
+      </div>
+    </section>
+
+    <section id="productSections" class="product-sections"></section>
+
+    <footer class="page-footer">
+      <span>Controle de Pedidos e Estoque</span>
+      <span>Os dados são mantidos neste navegador.</span>
+    </footer>
+  </main>
+
+  <section class="print-only" id="printArea" aria-hidden="true"></section>
+  <script src="script.js"></script>
+</body>
+</html>
