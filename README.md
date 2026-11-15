@@ -1,6 +1,6 @@
 # Controle de Pedidos e Estoque
 
-Site estático para cadastrar o estoque atual, informar quantidades para reposição e imprimir/salvar o pedido em PDF.
+Site estático para informar quantidades para reposição e imprimir/salvar o pedido em PDF.
 
 ## Arquivos
 - `index.html`: estrutura da página.

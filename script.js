@@ -49,7 +49,7 @@ const searchInput = document.getElementById("searchInput");
 
 products.forEach((product, index) => {
   const saved = savedState[index] || {};
-  state[index] = { stock: saved.stock ?? "", order: saved.order ?? "" };
+  state[index] = { order: saved.order ?? "" };
 });
 
 function saveState() {
@@ -78,7 +78,7 @@ function render() {
     table.className = "product-table";
     table.innerHTML = `
       <thead><tr>
-        <th>Produto</th><th>Tamanho</th><th>Estoque atual</th><th>Qtd. a pedir</th>
+        <th>Produto</th><th>Tamanho</th><th>Qtd. a pedir</th>
       </tr></thead><tbody></tbody>`;
     const tbody = table.querySelector("tbody");
 
@@ -87,9 +87,6 @@ function render() {
       row.innerHTML = `
         <td class="product-name">${product.name}</td>
         <td class="product-size">${product.size}</td>
-        <td><input class="qty-input" type="number" min="0" step="1" inputmode="numeric"
-          aria-label="Estoque atual de ${product.name} ${product.size}" placeholder="0"
-          value="${state[product.index].stock}" data-index="${product.index}" data-field="stock"></td>
         <td><input class="qty-input order-input" type="number" min="0" step="1" inputmode="numeric"
           aria-label="Quantidade a pedir de ${product.name} ${product.size}" placeholder="0"
           value="${state[product.index].order}" data-index="${product.index}" data-field="order"></td>`;
@@ -128,7 +125,7 @@ function updateSummary() {
 
 function generatePDF() {
   const orderedProducts = products
-    .map((p, index) => ({ ...p, stock: state[index].stock, order: Number(state[index].order) || 0 }))
+    .map((p, index) => ({ ...p, order: Number(state[index].order) || 0 }))
     .filter(p => p.order > 0)
     .sort((a, b) => categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
       || sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size));
@@ -147,9 +144,9 @@ function generatePDF() {
     const group = orderedProducts.filter(p => p.category === category);
     if (!group.length) return;
     html += `<h2 class="print-section">${category}</h2>
-      <table class="print-table"><thead><tr><th>Produto</th><th>Tamanho</th><th>Estoque atual</th><th>Quantidade a pedir</th></tr></thead><tbody>`;
+      <table class="print-table"><thead><tr><th>Produto</th><th>Tamanho</th><th>Qtd. a pedir</th></tr></thead><tbody>`;
     group.forEach(p => {
-      html += `<tr><td>${p.name}</td><td>${p.size}</td><td>${p.stock === "" ? "—" : p.stock}</td><td><strong>${p.order}</strong></td></tr>`;
+      html += `<tr><td>${p.name}</td><td>${p.size}</td><td><strong>${p.order}</strong></td></tr>`;
     });
     html += `</tbody></table>`;
   });
@@ -163,9 +160,8 @@ function generatePDF() {
 document.getElementById("printButton").addEventListener("click", generatePDF);
 document.getElementById("printTop").addEventListener("click", generatePDF);
 document.getElementById("clearOrder").addEventListener("click", () => {
-  if (!confirm("Deseja zerar todas as quantidades de estoque e pedido?")) return;
+  if (!confirm("Deseja zerar todas as quantidades do pedido?")) return;
   Object.keys(state).forEach(index => {
-    state[index].stock = "";
     state[index].order = "";
   });
   saveState();
