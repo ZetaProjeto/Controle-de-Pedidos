@@ -85,9 +85,9 @@ function render() {
     filtered.forEach(product => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td class="product-name">${product.name}</td>
-        <td class="product-size">${product.size}</td>
-        <td><input class="qty-input order-input" type="number" min="0" step="1" inputmode="numeric"
+        <td class="product-name" data-label="Produto">${product.name}</td>
+        <td class="product-size" data-label="Tamanho">${product.size}</td>
+        <td data-label="Qtd. a pedir"><input class="qty-input order-input" type="number" min="0" step="1" inputmode="numeric"
           aria-label="Quantidade a pedir de ${product.name} ${product.size}" placeholder="0"
           value="${state[product.index].order}" data-index="${product.index}" data-field="order"></td>`;
       tbody.appendChild(row);
