@@ -123,7 +123,7 @@ function updateSummary() {
   document.getElementById("totalUnits").textContent = ordered;
 }
 
-function generatePDF() {
+async function generatePDF() {
   const orderedProducts = products
     .map((p, index) => ({ ...p, order: Number(state[index].order) || 0 }))
     .filter(p => p.order > 0)
@@ -131,30 +131,87 @@ function generatePDF() {
       || sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size));
 
   if (!orderedProducts.length) {
-    alert("Informe a quantidade de fardos de pelo menos um produto antes de baixar o PDF.");
+    alert("Informe a quantidade de fardos de pelo menos um produto antes de compartilhar o PDF.");
     return;
   }
 
-  const dateValue = document.getElementById("orderDate").value;
-  const date = dateValue ? new Date(`${dateValue}T12:00:00`).toLocaleDateString("pt-BR") : new Date().toLocaleDateString("pt-BR");
-  const total = orderedProducts.reduce((sum, p) => sum + p.order, 0);
-  let html = `<h1 class="print-title">Pedido de Reposição de Estoque</h1>
-    <div class="print-meta">Data: ${date}<br>Documento para conferência e envio ao fornecedor</div>`;
-  categoryOrder.forEach(category => {
-    const group = orderedProducts.filter(p => p.category === category);
-    if (!group.length) return;
-    html += `<h2 class="print-section">${category}</h2>
-      <table class="print-table"><thead><tr><th>Produto</th><th>Tamanho</th><th>Qtd. a pedir (fardos)</th></tr></thead><tbody>`;
-    group.forEach(p => {
-      html += `<tr><td>${p.name}</td><td>${p.size}</td><td><strong>${p.order} fardo(s)</strong></td></tr>`;
+  if (!window.jspdf?.jsPDF) {
+    alert("Não foi possível carregar o gerador de PDF. Verifique sua conexão e tente novamente.");
+    return;
+  }
+
+  const buttonIds = ["printButton", "printTop"];
+  const buttons = buttonIds.map(id => document.getElementById(id));
+  buttons.forEach(button => { button.disabled = true; button.textContent = "Gerando PDF..."; });
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    const dateValue = document.getElementById("orderDate").value;
+    const date = dateValue ? new Date(`${dateValue}T12:00:00`).toLocaleDateString("pt-BR") : new Date().toLocaleDateString("pt-BR");
+    const total = orderedProducts.reduce((sum, p) => sum + p.order, 0);
+    const filename = `pedido-${dateValue || new Date().toISOString().slice(0, 10)}.pdf`;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(17);
+    pdf.text("PEDIDO DE REPOSICAO", 14, 19);
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(10);
+    pdf.text(`Data: ${date}`, 14, 27);
+    pdf.setDrawColor(210, 220, 230);
+    pdf.line(14, 31, 196, 31);
+
+    const rows = [];
+    categoryOrder.forEach(category => {
+      const group = orderedProducts.filter(p => p.category === category);
+      if (!group.length) return;
+      rows.push([{ content: category, colSpan: 3, styles: { fillColor: [231, 239, 247], textColor: [16, 42, 67], fontStyle: "bold" } }]);
+      group.forEach(p => rows.push([p.name, p.size, `${p.order} fardo(s)`]));
     });
-    html += `</tbody></table>`;
-  });
-  html += `<div class="print-total">Total de fardos solicitados: ${total}</div>
-    <div class="print-note">Pedido gerado pelo Controle de Pedidos e Estoque.</div>`;
-  const printArea = document.getElementById("printArea");
-  printArea.innerHTML = html;
-  window.print();
+    pdf.autoTable({
+      startY: 36,
+      head: [["Produto", "Tamanho", "Quantidade"]],
+      body: rows,
+      theme: "grid",
+      margin: { left: 14, right: 14, top: 14, bottom: 18 },
+      styles: { font: "helvetica", fontSize: 9, cellPadding: 2.7, overflow: "linebreak" },
+      headStyles: { fillColor: [16, 42, 67], textColor: 255 },
+      columnStyles: { 0: { cellWidth: 102 }, 1: { cellWidth: 34 }, 2: { cellWidth: 46 } }
+    });
+    let y = pdf.lastAutoTable.finalY + 10;
+    if (y > 270) { pdf.addPage(); y = 20; }
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(11);
+    pdf.text(`Total de fardos: ${total}`, 14, y);
+
+    const blob = pdf.output("blob");
+    const file = new File([blob], filename, { type: "application/pdf" });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: "Pedido de reposição" });
+        return;
+      } catch (error) {
+        if (error.name === "AbortError") return;
+        // Alguns navegadores falham ao compartilhar arquivos: disponibilizar download.
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  } catch (error) {
+    console.error("Erro ao gerar PDF:", error);
+    alert("Não foi possível gerar o PDF. Tente novamente.");
+  } finally {
+    buttons.forEach((button, index) => {
+      button.disabled = false;
+      button.textContent = index === 0 ? "Compartilhar PDF do pedido" : "Compartilhar PDF";
+    });
+  }
 }
 
 document.getElementById("printButton").addEventListener("click", generatePDF);

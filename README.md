@@ -1,6 +1,6 @@
 # Controle de Pedidos e Estoque
 
-Site estático para informar quantidades para reposição e imprimir/salvar o pedido em PDF.
+Site estático para informar quantidades para reposição e gerar e compartilhar somente a folha do pedido em PDF.
 
 ## Arquivos
 - `index.html`: estrutura da página.
@@ -16,6 +16,6 @@ Site estático para informar quantidades para reposição e imprimir/salvar o pe
 6. Aguarde a publicação e abra o endereço informado pelo GitHub.
 
 ## Gerar o PDF
-Preencha a coluna **Qtd. a pedir (fardos)** nos produtos desejados e clique em **Baixar PDF do pedido**. Na janela de impressão do navegador, escolha **Salvar como PDF**.
+Preencha a coluna **Qtd. a pedir (fardos)** nos produtos desejados e clique em **Baixar PDF do pedido**. O navegador tentará abrir o compartilhamento nativo do aparelho (por exemplo, WhatsApp). Se não for compatível, o PDF será baixado automaticamente, sem abrir a impressão. É necessário acesso à internet para carregar as bibliotecas de PDF. Para compartilhamento nativo, publique em HTTPS (como GitHub Pages).
 
 Observação: os campos são salvos no armazenamento local do navegador (localStorage), no mesmo dispositivo e navegador. Limpar os dados do navegador pode apagar essas informações.
