@@ -1,10 +1,7 @@
-# Controle de Pedidos e Estoque
+# Controle de Pedidos — PDF personalizado
 
-Abra `index.html` ou publique os arquivos no GitHub Pages.
+Abra `index.html` ou publique os quatro arquivos no GitHub Pages.
 
-Preencha as quantidades em fardos e clique em **Compartilhar PDF do pedido**.
-O PDF é gerado diretamente pelo próprio JavaScript, sem bibliotecas externas, sem internet adicional e sem tela de impressão.
+Informe as quantidades em fardos e clique em **Compartilhar PDF**. O PDF A4 possui cabeçalho azul-marinho, data, produtos pedidos agrupados por categoria, quantidades e total de fardos. Apenas produtos com quantidade maior que zero entram no arquivo. O PDF é gerado sem biblioteca externa e sem janela de impressão.
 
-Em dispositivos compatíveis, abre o menu nativo de compartilhamento; nos demais, baixa o PDF. O compartilhamento de arquivos normalmente exige HTTPS (como GitHub Pages) e um navegador compatível.
-
-O PDF contém somente a folha do pedido: data, produtos solicitados, tamanhos, fardos e total.
+Em navegadores com compartilhamento de arquivos, abre o menu de compartilhamento. Caso contrário, o PDF é baixado. Para compartilhar pelo celular, prefira abrir o site publicado via HTTPS.
